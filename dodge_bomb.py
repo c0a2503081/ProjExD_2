@@ -1,6 +1,7 @@
 import os
 import sys
 import random
+import time
 import pygame as pg
 
 
@@ -27,6 +28,20 @@ def check_bound(rct: pg.Rect) -> tuple[bool,bool]:
         tate = False
     return yoko,tate
 
+def gameover(screen: pg.Surface) -> None:
+        screen = pg.display.set_mode((800, 600))
+        go_rct=pg.Surface((WIDTH,HEIGHT))
+        go_rct.set_alpha(100)
+        go_font = pg.font.Font(None,80)
+        txt = go_font.render("GAME_OVER",True,(255,255,255))
+        screen.blit(txt,[250,200])
+        go_img = pg.image.load("fig/8.png")
+        screen.blit(go_img,[200,200])
+        screen.blit(go_img,[650,200])
+        screen.blit(go_rct,[0,0])
+        pg.display.update()
+        time.sleep(5)
+
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
     screen = pg.display.set_mode((WIDTH, HEIGHT))
@@ -42,17 +57,17 @@ def main():
     bb_rct.centerx = random.randint(0, WIDTH)  # 爆弾の初期横座標を設定する
     bb_rct.centery = random.randint(0, HEIGHT)  # 爆弾の初期縦座標を設定する
     vx, vy = +5, +5  # 爆弾の速度 
-
-
+    
     clock = pg.time.Clock()
     tmr = 0
     while True:
         for event in pg.event.get():
-            if event.type == pg.QUIT: 
+            if event.type == pg.QUIT:
                 return
             
 
         if kk_rct.colliderect(bb_rct):
+            gameover(screen)
             return
         screen.blit(bg_img, [0, 0]) 
 
